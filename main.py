@@ -98,36 +98,37 @@ def atacar(tableroE, tableroVisible):
         tableroVisible[fila][columna] = "💨"
         return False
 
-def atacarIa(tablero):
-    acierto = False
+def atacarIa(tablero ):
+        acierto=False
 
-
-    if(x<5):
-        while not acierto:
+        while not acierto  :
             columna = r.randint(0,len(tablero)-1)
             fila = r.randint(0,len(tablero)-1)
             if(tablero[fila][columna]== "🚢"):
                 tablero[fila][columna] = "💥"
-                return True
+                recordar = True
 
-    else:
-
-
-        while not acierto:
-            columna = r.randint(0,len(tablero)-1)
-            fila = r.randint(0,len(tablero)-1)
-            if(tablero[fila][columna]== "🚢"):
-                tablero[fila][columna] = "💥"
-                return True
+                return True,fila,columna,recordar
             elif (tablero[fila][columna]== "🌊"):
                 tablero[fila][columna] = "💨"
                 return False
+def ataqueIa(tablero,fila,columna):
+    recordar = True
+    acierto=False
+    while not acierto:
+        print("asdffasf")
+        columna = columna + r.choice([-1, 1])
+        fila = fila+ r.choice([-1, 1])
 
 
-
-
-
-
+        if (0 <= columna < len(tablero[0] and 0 <= fila < len(tablero))):
+            if (tablero[fila][columna] == "🚢"):
+                tablero[fila][columna] = "💥"
+                return True, fila, columna, recordar
+            elif (tablero[fila][columna] == "🌊"):
+                tablero[fila][columna] = "💨"
+                recordar = False
+                return False,recordar
 
 
 jugadores=["x","y"]
@@ -149,16 +150,22 @@ print("         Tu tablero")
 print("-----------------------------")
 mostrarTablero(tablero)
 
+recordar=True
 while barcosRestantes > 0 and  barcosRestantesE > 0  :
     if atacar(tableroE, tableroVisible):
         barcosRestantesE -= 1
         print("Casillas de barco restantes:", barcosRestantes)
 
     mostrarTablero(tableroVisible)
-    if atacarIa(tablero):
-        barcosRestantes -= 1
-        print("holaaa")
-    print("           Tu tablero")
+
+    acierto, fila, columna, recordar = atacarIa(tablero)
+
+    if acierto and recordar:
+        ataqueIa(tablero, fila, columna)
+
+
+
+    print("            Tu tablero")
     print("-------------------------------")
     mostrarTablero(tablero)
 
