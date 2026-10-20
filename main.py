@@ -1,18 +1,19 @@
 import random as r
 
-def barcoHundido(tableroE,pixelBarcos):
-    for i in range(len(pixelBarcos)):
+def barcoHundido(tableroE,barco):
+
         esta = False
 
+
         for fila in tableroE:
-            for barco in fila:
-                if barco == pixelBarcos[i]:
+            for casilla in fila:
+                if casilla == barco:
                     esta = True
 
         if not esta:
-            print(f"Barco {pixelBarcos[0]} hundido")
-            pixelBarcos.pop(0)
-            print(pixelBarcos)
+            print(f"Barco {barco} hundido")
+
+
 
 
 
@@ -59,7 +60,7 @@ def crearTableroEnemigo(n):
 barcos = [4, 3, 2, 2, 1, 1]
 barcose = [4, 3, 2, 2, 1, 1]
 
-pixelBarcos = ["🚢", "⛵", "⛴️", "⛴️", "⛴️", "🚤"]
+pixelBarcos = ["⛵","🚤","🛥️","️⛴️","🚢","🛳️"]
 pixelBarcos1 = pixelBarcos.copy()
 pixelBarcos2 = pixelBarcos.copy()
 
@@ -119,8 +120,10 @@ def atacar(tableroE, tableroVisible, pixelBarcos1):
 
     if tableroE[fila][columna] in pixelBarcos1:
         print("¡Le has dado!")
+        barco = tableroE[fila][columna]
         tableroVisible[fila][columna] = "💥"
         tableroE [fila][columna] = "💥"
+        barcoHundido(tableroE,barco)
         return True
     else:
         print("Agua")
@@ -147,9 +150,23 @@ def atacarIa(tablero, pixelBarcos1):
 def ataqueIa(tablero, fila, columna, barcosRestantesE, pixelBarcos1):
     recordar = True
 
-    if barcosRestantesE < 7 and r.choice([0, 1, 1]):
-        intentos = 0
+    if barcosRestantesE < 12 and r.choice([0, 1, 1]):
 
+        while True:
+            columna = r.randint(0, len(tablero[0]) - 1)
+            fila = r.randint(0, len(tablero) - 1)
+
+            if tablero[fila][columna] in pixelBarcos1:
+                tablero[fila][columna] = "💥"
+                recordar = True
+                return True, fila, columna, recordar
+
+
+    else:
+
+
+
+        intentos = 0
         while intentos < 4:
             direccion = r.choice([0, 1])
             nuevaFila = fila
@@ -207,8 +224,9 @@ while barcosRestantes > 0 and barcosRestantesE > 0:
     if atacar(tableroE, tableroVisible, pixelBarcos2):
         barcosRestantesE -= 1
         print("Barcos restantes del enemigo:", barcosRestantesE)
-        barcoHundido(tableroE,pixelBarcos1)
+
     mostrarTablero(tableroVisible)
+
 
 
     if recordar:
@@ -223,3 +241,8 @@ while barcosRestantes > 0 and barcosRestantesE > 0:
     print("Tu tablero")
     print("-------------------------------")
     mostrarTablero(tablero)
+if( barcosRestantes == 0):
+    print("La ia te ha ganado")
+    mostrarTablero(tableroE)
+else:
+    print("has ganado!")
